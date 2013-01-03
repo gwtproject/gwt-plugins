@@ -49,7 +49,7 @@ endif
 export FLAG32BIT
 
 ifeq ($(BROWSER),)
-$(warning Defaulting to FF3 build [set with BROWSER=ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, f110, ff120, ff130, ff140, ff150, ff160, ff170])
+$(warning Defaulting to FF3 build [set with BROWSER=ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, f110, ff120, ff130, ff140, ff150, ff160, ff170, ff180])
 BROWSER=ff3
 endif
 
@@ -182,7 +182,12 @@ ifeq ($(BROWSER),ff170)
 GECKO_VERSION   = 17.0.0
 CFLAGS += -DGECKO_VERSION=17000
 else
-$(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, ff110, ff120, ff130, ff140, ff150, ff160, ff170)
+ifeq ($(BROWSER),ff180)
+GECKO_VERSION   = 18.0.0
+CFLAGS += -DGECKO_VERSION=18000
+else
+$(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, ff110, ff120, ff130, ff140, ff150, ff160, ff170, ff180)
+endif
 endif
 endif
 endif
@@ -207,7 +212,7 @@ CXXFLAGS = $(CXXONLYFLAGS) $(CFLAGS)
 DIR = $(shell pwd)
 
 # Set $PLUGIN_SDKS if it isn't in the default location
-PLUGIN_SDKS ?= ../../../plugin-sdks
+PLUGIN_SDKS ?= ../../plugin-sdks
 GECKO_PLATFORM ?= $(TARGET_PLATFORM)
 
 COMMON            = ../common/libcommon$(FLAG32BIT).a
@@ -250,7 +255,10 @@ DLLFLAGS += \
 
 INC += -I$(GECKO_PLAT_INC) -I$(GECKO_SDK)/include -I$(dir $(FF_HEADER))
 
-VERSION ?= 1.0.$(shell ./getversion).$(shell date +%Y%m%d%H%M%S)
+VERSION ?= unset
+ifeq ($(VERSION), unset)
+$(error You must set VERSION to 1.0.{svn version})
+endif
 
 .PHONY: all xpi lib common browser clean depend install install-platform find-ff-libs
 
