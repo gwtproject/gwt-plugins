@@ -49,7 +49,7 @@ endif
 export FLAG32BIT
 
 ifeq ($(BROWSER),)
-$(warning Defaulting to FF3 build [set with BROWSER=ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, f110, ff120, ff130, ff140, ff150, ff160, ff170, ff180])
+$(warning Defaulting to FF3 build [set with BROWSER=ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, f110, ff120, ff130, ff140, ff150, ff160, ff170, ff180, ff190])
 BROWSER=ff3
 endif
 
@@ -186,7 +186,12 @@ ifeq ($(BROWSER),ff180)
 GECKO_VERSION   = 18.0.0
 CFLAGS += -DGECKO_VERSION=18000
 else
-$(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, ff110, ff120, ff130, ff140, ff150, ff160, ff170, ff180)
+ifeq ($(BROWSER),ff190)
+GECKO_VERSION   = 19.0.0
+CFLAGS += -DGECKO_VERSION=19000
+else
+$(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, ff110, ff120, ff130, ff140, ff150, ff160, ff170, ff180, ff190)
+endif
 endif
 endif
 endif
@@ -257,7 +262,7 @@ INC += -I$(GECKO_PLAT_INC) -I$(GECKO_SDK)/include -I$(dir $(FF_HEADER))
 
 VERSION ?= unset
 ifeq ($(VERSION), unset)
-$(error You must set VERSION to 1.0.{svn version})
+$(error You must set VERSION to a string like 1.<major version>dev)
 endif
 
 .PHONY: all xpi lib common browser clean depend install install-platform find-ff-libs
