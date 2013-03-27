@@ -49,7 +49,7 @@ endif
 export FLAG32BIT
 
 ifeq ($(BROWSER),)
-$(warning Defaulting to FF3 build [set with BROWSER=ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, f110, ff120, ff130, ff140, ff150, ff160, ff170, ff180, ff190])
+$(warning Defaulting to FF3 build [set with BROWSER=ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, f110, ff120, ff130, ff140, ff150, ff160, ff170, ff180, ff190, ff200])
 BROWSER=ff3
 endif
 
@@ -190,7 +190,12 @@ ifeq ($(BROWSER),ff190)
 GECKO_VERSION   = 19.0.0
 CFLAGS += -DGECKO_VERSION=19000
 else
-$(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, ff110, ff120, ff130, ff140, ff150, ff160, ff170, ff180, ff190)
+ifeq ($(BROWSER),ff200)
+GECKO_VERSION   = 20.0.0
+CFLAGS += -DGECKO_VERSION=20000
+else
+$(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, ff110, ff120, ff130, ff140, ff150, ff160, ff170, ff180, ff190, ff200)
+endif
 endif
 endif
 endif
