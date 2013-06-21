@@ -67,7 +67,7 @@ endif
 
 CFLAGS += -DBROWSER=$(BROWSER)
 GECKO_MINOR_VERSION=
-GECKO_DLLFLAGS = -lxpcomglue_s -lxpcom
+GECKO_DLLFLAGS = -lxpcomglue_s
 NSPR_DLLFLAGS = -lnspr4
 MOZJS_DLLFLAGS = -lxul
 
@@ -198,7 +198,12 @@ ifeq ($(BROWSER),ff210)
 GECKO_VERSION   = 21.0.0
 CFLAGS += -DGECKO_VERSION=21000
 else
+ifeq ($(BROWSER),ff220)
+GECKO_VERSION   = 22.0.0
+CFLAGS += -DGECKO_VERSION=22000
+else
 $(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, ff110, ff120, ff130, ff140, ff150, ff160, ff170, ff180, ff190, ff200, ff210)
+endif
 endif
 endif
 endif
