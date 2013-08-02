@@ -29,7 +29,11 @@
 #include "jsapi.h"
 #include "nsCOMPtr.h"
 #include "nsStringAPI.h"
+#if GECKO_VERSION <= 22000
 #include "nsIJSContextStack.h"
+#else
+#include "nsIXPConnect.h"
+#endif //GECKO_VERSION
 #include "nsIPrincipal.h"
 #include "nsServiceManagerUtils.h"
 
@@ -47,6 +51,9 @@ static inline void JS_NewNumberValue(JSContext *cx, double d, jsval *rval) {
 #endif
 
 static JSContext* getJSContext() {
+
+#if GECKO_VERSION <= 22000
+
   // Get JSContext from stack.
   nsCOMPtr<nsIJSContextStack> stack =
       do_GetService("@mozilla.org/js/xpc/ContextStack;1");
@@ -65,6 +72,26 @@ static JSContext* getJSContext() {
   }
 
   return cx;
+
+#else
+
+  nsresult rv;
+  nsCOMPtr<nsIXPConnect> xpc = do_GetService(nsIXPConnect::GetCID(), &rv);
+  if (!NS_SUCCEEDED(rv)) {
+    Debug::log(Debug::Error) << "getJSContext: no context stack"
+        << Debug::flush;
+    return NULL;
+  }
+
+  JSContext *cx = xpc->GetCurrentJSContext();
+  if (!cx) {
+    Debug::log(Debug::Error) << "getJSContext: Null JS context"
+        << Debug::flush;
+    return NULL;
+  }
+  return cx;
+
+#endif
 }
 
 FFSessionHandler::FFSessionHandler(HostChannel* channel)

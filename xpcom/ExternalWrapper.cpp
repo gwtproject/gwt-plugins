@@ -30,8 +30,12 @@
 #include "nsIDOMLocation.h"
 #include "nsXPCOMStrings.h"
 #include "nsICategoryManager.h"
+#if GECKO_VERSION <= 22000
 #include "nsIJSContextStack.h"
-#include "nsIScriptContext.h"
+#else
+#include "nsIXPConnect.h"
+#endif //GECKO_VERSION
+#include "nsIScriptContext.h" 
 #include "nsIScriptGlobalObject.h"
 #include "nsPIDOMWindow.h"
 #include "LoadModuleMessage.h"
@@ -91,6 +95,9 @@ static nsresult getUserAgent(std::string& userAgent) {
  * @return true on success
  */
 static bool getWindowObject(nsIDOMWindow** win) {
+
+#if GECKO_VERSION <= 22000
+
   // Get JSContext from stack.
   nsCOMPtr<nsIJSContextStack> stack =
       do_GetService("@mozilla.org/js/xpc/ContextStack;1");
@@ -105,6 +112,26 @@ static bool getWindowObject(nsIDOMWindow** win) {
         << Debug::flush;
     return false;
   }
+
+#else
+
+  nsresult rv;
+  nsCOMPtr<nsIXPConnect> xpc = do_GetService(nsIXPConnect::GetCID(), &rv);
+  if (!NS_SUCCEEDED(rv)) {
+    Debug::log(Debug::Error) << "getWindowObject: no context stack"
+        << Debug::flush;
+    return false;
+  }
+
+  JSContext *cx = xpc->GetCurrentJSContext();
+  if (!cx) {
+    Debug::log(Debug::Error) << "getWindowObject: no context on stack"
+        << Debug::flush;
+    return false;
+  }
+
+#endif
+
   if (!(::JS_GetOptions(cx) & JSOPTION_PRIVATE_IS_NSISUPPORTS)) {
     Debug::log(Debug::Error)
         << "getWindowObject: context doesn't have nsISupports" << Debug::flush;

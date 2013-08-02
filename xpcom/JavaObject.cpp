@@ -30,7 +30,11 @@ static JSClass JavaObjectClass = {
   JSCLASS_HAS_PRIVATE | JSCLASS_HAS_RESERVED_SLOTS(1) | JSCLASS_NEW_ENUMERATE, /* flags */
 
   JS_PropertyStub, /* add property */
+#if GECKO_VERSION <= 22000
   JS_PropertyStub, /* delete property */
+#else
+  JS_DeletePropertyStub,
+#endif
 #if GECKO_VERSION < 15000
   JavaObject::getProperty, /* get property */
   JavaObject::setProperty, /* set property */

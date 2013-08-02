@@ -206,7 +206,16 @@ ifeq ($(OS),mac)
 NSPR_DLLFLAGS = -lnss3
 endif
 else
+ifeq ($(BROWSER),ff230)
+GECKO_VERSION   = 23.0.0
+CFLAGS += -DGECKO_VERSION=23000
+GECKO_DLLFLAGS = -lxpcomglue_s
+ifeq ($(OS),mac)
+NSPR_DLLFLAGS = -lnss3
+endif
+else
 $(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff3+, ff35, ff36, ff40, ff50, ff60, ff70, ff80, ff90, ff100, ff110, ff120, ff130, ff140, ff150, ff160, ff170, ff180, ff190, ff200, ff210)
+endif
 endif
 endif
 endif
