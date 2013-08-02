@@ -35,7 +35,7 @@
 #else
 #include "nsIXPConnect.h"
 #endif //GECKO_VERSION
-#include "nsIScriptContext.h" 
+#include "nsIScriptContext.h"
 #include "nsIScriptGlobalObject.h"
 #include "nsPIDOMWindow.h"
 #include "LoadModuleMessage.h"
