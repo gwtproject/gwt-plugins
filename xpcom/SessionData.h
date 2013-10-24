@@ -83,8 +83,12 @@ private:
     OBJ_TO_INNER_OBJECT(ctx, global);
 #endif
 
+#if GECKO_VERSION >= 25000
+    JSObject* global = JS::CurrentGlobalOrNull(ctx);
+#else
 #if GECKO_VERSION >= 10000
     JSObject* global = JS_GetGlobalForScopeChain(ctx);
+#endif
 #endif
 
     return global;

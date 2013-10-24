@@ -82,7 +82,7 @@ endif
 # Set OS as well as CFLAGS, CXX, and other common make variables
 ifeq ($(shell uname),Linux)
 OS=linux
-BASECFLAGS= $(DEBUGCFLAGS) -O2 -fPIC $(INC) -rdynamic
+BASECFLAGS= $(DEBUGCFLAGS) -O2 -fPIC $(INC) -rdynamic -std=c++0x
 ARCHCFLAGS= -m$(FLAG32BIT)
 ALLARCHCFLAGS= -m$(FLAG32BIT)
 #CXX=clang # for better build error messages

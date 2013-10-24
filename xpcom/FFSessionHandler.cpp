@@ -129,7 +129,11 @@ void FFSessionHandler::getStringObjectClass(JSContext* ctx) {
 }
 
 void FFSessionHandler::getToStringTearOff(JSContext* ctx) {
+#if GECKO_VERSION >= 25000
+  JS::Rooted<JS::Value> funcVal(ctx);
+# else
   jsval funcVal;
+#endif
 
   Debug::log(Debug::Debugging) << "Getting function \"__gwt_makeTearOff\""
         << Debug::flush;
@@ -180,7 +184,11 @@ void FFSessionHandler::disconnectDetectedImpl() {
   Debug::log(Debug::Debugging) << "Getting function \"__gwt_disconnected\""
         << Debug::flush;
 
+#if GECKO_VERSION >= 25000
+  JS::Rooted<JS::Value> funcVal(ctx);
+# else
   jsval funcVal;
+#endif
   if (!JS_GetProperty(ctx, global, "__gwt_disconnected", &funcVal)
       || funcVal == JSVAL_VOID) {
     Debug::log(Debug::Error) << "Could not get function \"__gwt_disconnected\""
@@ -281,7 +289,11 @@ bool FFSessionHandler::invoke(HostChannel& channel, const gwt::Value& thisObj, c
     return true;
   }
 
+#if GECKO_VERSION >= 25000
+  JS::Rooted<JS::Value> funcVal(ctx);
+# else
   jsval funcVal;
+#endif
   // TODO: handle non-ASCII method names
   if (!JS_GetProperty(ctx, global, methodName.c_str(), &funcVal)
       || funcVal == JSVAL_VOID) {
@@ -668,7 +680,11 @@ void FFSessionHandler::disconnect() {
 
 void* FFSessionHandler::identityFromObject(JSObject* obj) {
   JSContext* ctx = getJSContext();
+#if GECKO_VERSION >= 25000
+  JS::Rooted<JS::Value> rval(ctx);
+# else
   jsval rval;
+#endif
   void* returnValue = obj;
   if (JS_GetProperty(ctx, obj, "wrappedJSObject", &rval)
 #ifdef JSVAL_IS_OBJECT
