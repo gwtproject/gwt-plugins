@@ -230,7 +230,16 @@ ifeq ($(OS),mac)
 NSPR_DLLFLAGS = -lnss3
 endif
 else
+ifeq ($(BROWSER),ff251)
+GECKO_VERSION   = 25.0.1
+CFLAGS += -DGECKO_VERSION=25001
+GECKO_DLLFLAGS = -lxpcomglue_s
+ifeq ($(OS),mac)
+NSPR_DLLFLAGS = -lnss3
+endif
+else
 $(error Unrecognized BROWSER of $(BROWSER) - options are ff3, ff4, ff5, ...)
+endif
 endif
 endif
 endif
@@ -332,63 +341,6 @@ browser:: find-ff-libs
 
 generate-install:: $(EXTENSION_OUTDIR) install-template.rdf
 	sed -e s/GWT_DEV_PLUGIN_VERSION/$(VERSION)/ install-template.rdf >$(INSTALL_RDF)
-
-linuxplatforms:
-	$(MAKE) lib BROWSER=ff3 ARCH=x86
-	$(MAKE) lib BROWSER=ff3+ ARCH=x86
-	$(MAKE) lib BROWSER=ff35 ARCH=x86
-	$(MAKE) lib BROWSER=ff36 ARCH=x86
-	$(MAKE) lib BROWSER=ff40 ARCH=x86
-	$(MAKE) lib BROWSER=ff50 ARCH=x86
-	$(MAKE) lib BROWSER=ff60 ARCH=x86
-	$(MAKE) lib BROWSER=ff70 ARCH=x86
-	$(MAKE) lib BROWSER=ff80 ARCH=x86
-	$(MAKE) lib BROWSER=ff90 ARCH=x86
-	$(MAKE) lib BROWSER=ff100 ARCH=x86
-	$(MAKE) lib BROWSER=ff110 ARCH=x86
-	$(MAKE) lib BROWSER=ff120 ARCH=x86
-	$(MAKE) lib BROWSER=ff130 ARCH=x86
-	$(MAKE) lib BROWSER=ff140 ARCH=x86
-	$(MAKE) lib BROWSER=ff150 ARCH=x86
-	$(MAKE) lib BROWSER=ff160 ARCH=x86
-	$(MAKE) lib BROWSER=ff170 ARCH=x86
-	$(MAKE) lib BROWSER=ff3 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff3+ ARCH=x86_64
-	$(MAKE) lib BROWSER=ff35 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff36 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff40 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff50 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff60 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff70 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff80 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff90 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff100 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff110 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff120 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff130 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff140 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff150 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff160 ARCH=x86_64
-	$(MAKE) lib BROWSER=ff170 ARCH=x86_64
-
-macplatforms:
-	$(MAKE) lib BROWSER=ff3
-	$(MAKE) lib BROWSER=ff35
-	$(MAKE) lib BROWSER=ff36
-	$(MAKE) lib BROWSER=ff40
-	$(MAKE) lib BROWSER=ff50
-	$(MAKE) lib BROWSER=ff60
-	$(MAKE) lib BROWSER=ff70
-	$(MAKE) lib BROWSER=ff80
-	$(MAKE) lib BROWSER=ff90
-	$(MAKE) lib BROWSER=ff100
-	$(MAKE) lib BROWSER=ff110
-	$(MAKE) lib BROWSER=ff120
-	$(MAKE) lib BROWSER=ff130
-	$(MAKE) lib BROWSER=ff140
-	$(MAKE) lib BROWSER=ff150
-	$(MAKE) lib BROWSER=ff160
-	$(MAKE) lib BROWSER=ff170
 
 
 SRCS =	\
