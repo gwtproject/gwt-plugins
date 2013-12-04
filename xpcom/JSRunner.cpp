@@ -118,7 +118,7 @@ bool JSRunner::eval(JSContext* ctx, JSObject* object, const std::string& script)
 
   uintN line_number_start = 0;
   jsval rval;
-  JSBool js_ok = JS_EvaluateScriptForPrincipals(ctx, object, jsprin,
+  bool js_ok = JS_EvaluateScriptForPrincipals(ctx, object, jsprin,
       script.c_str(), script.length(), virtual_filename.c_str(),
       line_number_start, &rval);
 

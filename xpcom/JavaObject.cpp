@@ -66,7 +66,7 @@ static JSClass JavaObjectClass = {
 
 int JavaObject::getObjectId(JSContext* ctx, JSObject* obj) {
   jsval val;
-  JSClass* jsClass = JS_GET_CLASS(ctx, obj);
+  const JSClass* jsClass = JS_GET_CLASS(ctx, obj);
   if (jsClass != &JavaObjectClass) {
     Debug::log(Debug::Error)
         << "JavaObject::getObjectId called on non-JavaObject: " << jsClass->name
@@ -537,7 +537,13 @@ JSBool JavaObject::invokeJava(JSContext* ctx, SessionData* data,
     JS_SetPendingException(ctx, retJsVal);
     return false;
   }
-  if (!JS_SetElement(ctx, retval, 1, &retJsVal)) {
+#if GECKO_VERSION >= 26000
+        JS::Rooted<JS::Value> tmp(ctx);
+        tmp = retJsVal;
+#else
+        jsval tmp = retJsVal;
+#endif
+  if (!JS_SetElement(ctx, retval, 1, &tmp)) {
     Debug::log(Debug::Error) << "Error setting return value element in array"
         << Debug::flush;
     return false;

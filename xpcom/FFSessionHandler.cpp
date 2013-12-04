@@ -204,10 +204,16 @@ void FFSessionHandler::freeValue(HostChannel& channel, int idCount, const int* i
       << "FFSessionHandler::freeValue [ ";
   JSContext* ctx = getJSContext();
 
+// hoisted outside the loop because this might cut down on overhead
+#if GECKO_VERSION >= 26000
+    JS::Rooted<JS::Value> toRemove(ctx);
+#else
+    jsval toRemove;
+#endif
+
   for (int i = 0; i < idCount; ++i) {
     int objId = ids[i];
     dbg << objId << " ";
-    jsval toRemove;
     if (JS_GetElement(ctx, jsObjectsById, objId, &toRemove) && 
 #ifdef JSVAL_IS_OBJECT
        JSVAL_IS_OBJECT(toRemove)) {
@@ -271,12 +277,18 @@ bool FFSessionHandler::invoke(HostChannel& channel, const gwt::Value& thisObj, c
     return true;
   }
 
+#if GECKO_VERSION >= 26000
+  JS::Rooted<JS::Value> jsThis(ctx);
+#else
   jsval jsThis;
+#endif
   if (thisObj.isNull()) {
     jsThis = OBJECT_TO_JSVAL(global);
     Debug::log(Debug::Debugging) << " using global object for this" << Debug::flush;
   } else {
-    makeJsvalFromValue(jsThis, ctx, thisObj);
+    jsval tmp;
+    makeJsvalFromValue(tmp, ctx, thisObj);
+    jsThis = tmp;
     if (Debug::level(Debug::Spam)) {
       Debug::log(Debug::Spam) << "  obj=" << dumpJsVal(ctx, jsThis)
           << Debug::flush;
@@ -309,7 +321,14 @@ bool FFSessionHandler::invoke(HostChannel& channel, const gwt::Value& thisObj, c
       Debug::log(Debug::Spam) << "  arg[" << i << "] = " << dumpJsVal(ctx,
           jsargs[i]) << Debug::flush;
     }
-    if (!JS_SetElement(ctx, argsRoot.get(), i + 1, &jsargs[i])) {
+    // add the argument to argsRoot
+  #if GECKO_VERSION >= 26000
+    // Note: this might not work when copying GC is actually turned on in Firefox.
+    JS::MutableHandleValue argHandle = JS::MutableHandleValue::fromMarkedLocation(&jsargs[i]);
+  #else
+    jsval* argHandle = &jsargs[i];
+  #endif
+    if (!JS_SetElement(ctx, argsRoot.get(), i + 1, argHandle)) {
       Debug::log(Debug::Error)
           << "FFSessionhandler::invoke - could not set args[" << (i + 1) << "]"
           << Debug::flush;
@@ -533,7 +552,14 @@ void FFSessionHandler::makeValueFromJsval(gwt::Value& retVal, JSContext* ctx,
       } else {
         // Allocate a new id
         int objId = ++jsObjectId;
-        JS_SetElement(ctx, jsObjectsById, objId, const_cast<jsval*>(&value));
+#if GECKO_VERSION >= 26000
+        // Note: this might not work when copying GC is actually turned on in Firefox.
+        JS::MutableHandleValue tmp = JS::MutableHandleValue::fromMarkedLocation(
+          const_cast<jsval*>(&value));
+#else
+        jsval* tmp = const_cast<jsval*>(&value);
+#endif
+        JS_SetElement(ctx, jsObjectsById, objId, tmp);
         jsIdsByObject[objKey] = objId;
         retVal.setJsObjectId(objId);
       }
@@ -606,9 +632,15 @@ void FFSessionHandler::makeJsvalFromValue(jsval& retVal, JSContext* ctx,
     case gwt::Value::JS_OBJECT:
       {
         int jsId = value.getJsObjectId();
-        if (!JS_GetElement(ctx, jsObjectsById, jsId, &retVal)) {
+#if GECKO_VERSION >= 26000
+        JS::Rooted<JS::Value> tmp(ctx);
+#else
+        jsval tmp;
+#endif
+        if (!JS_GetElement(ctx, jsObjectsById, jsId, &tmp)) {
           Debug::log(Debug::Error) << "Error getting jsObject with id " << jsId << Debug::flush;
         }
+        retVal = tmp;
 #ifdef JSVAL_IS_OBJECT
         if (!JSVAL_IS_OBJECT(retVal)) {
 #else

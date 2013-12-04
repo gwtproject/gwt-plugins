@@ -144,11 +144,11 @@ binary-component lib/Darwin-gcc3/ff230/libgwt_dev_ff230.dylib ABI=Darwin_x86_64-
 binary-component lib/Darwin-gcc3/ff230/libgwt_dev_ff230.dylib ABI=Darwin_x86-gcc3 appversion<=23.0.*
 
 # Firefox 24
-binary-component lib/Linux_x86_64-gcc3/ff240/libgwt_dev_ff240.so ABI=Linux_x86_64-gcc3 appversion<=24.0.*
-binary-component lib/Linux_x86-gcc3/ff240/libgwt_dev_ff240.so ABI=Linux_x86-gcc3 appversion<=24.0.*
-binary-component lib/WINNT_x86-msvc/ff240/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion<=24.0.*
-binary-component lib/Darwin-gcc3/ff240/libgwt_dev_ff240.dylib ABI=Darwin_x86_64-gcc3 appversion<=24.0.*
-binary-component lib/Darwin-gcc3/ff240/libgwt_dev_ff240.dylib ABI=Darwin_x86-gcc3 appversion<=24.0.*
+binary-component lib/Linux_x86_64-gcc3/ff240/libgwt_dev_ff240.so ABI=Linux_x86_64-gcc3 appversion<=24.9.*
+binary-component lib/Linux_x86-gcc3/ff240/libgwt_dev_ff240.so ABI=Linux_x86-gcc3 appversion<=24.9.*
+binary-component lib/WINNT_x86-msvc/ff240/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion<=24.9.*
+binary-component lib/Darwin-gcc3/ff240/libgwt_dev_ff240.dylib ABI=Darwin_x86_64-gcc3 appversion<=24.9.*
+binary-component lib/Darwin-gcc3/ff240/libgwt_dev_ff240.dylib ABI=Darwin_x86-gcc3 appversion<=24.9.*
 
 # Firefox 25
 binary-component lib/Linux_x86_64-gcc3/ff250/libgwt_dev_ff250.so ABI=Linux_x86_64-gcc3 appversion<=25.0.0
@@ -163,6 +163,14 @@ binary-component lib/Linux_x86-gcc3/ff251/libgwt_dev_ff251.so ABI=Linux_x86-gcc3
 binary-component lib/WINNT_x86-msvc/ff251/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion<=25.0.*
 binary-component lib/Darwin-gcc3/ff251/libgwt_dev_ff251.dylib ABI=Darwin_x86_64-gcc3 appversion<=25.0.*
 binary-component lib/Darwin-gcc3/ff251/libgwt_dev_ff251.dylib ABI=Darwin_x86-gcc3 appversion<=25.0.*
+
+# Firefox 26
+binary-component lib/Linux_x86_64-gcc3/ff260/libgwt_dev_ff260.so ABI=Linux_x86_64-gcc3 appversion<=26.0.*
+binary-component lib/Linux_x86-gcc3/ff260/libgwt_dev_ff260.so ABI=Linux_x86-gcc3 appversion<=26.0.*
+binary-component lib/WINNT_x86-msvc/ff260/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion<=26.0.*
+binary-component lib/Darwin-gcc3/ff260/libgwt_dev_ff260.dylib ABI=Darwin_x86_64-gcc3 appversion<=26.0.*
+binary-component lib/Darwin-gcc3/ff260/libgwt_dev_ff260.dylib ABI=Darwin_x86-gcc3 appversion<=26.0.*
+
 
 
 interfaces components/IOOPHM.xpt

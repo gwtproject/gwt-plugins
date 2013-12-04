@@ -35,6 +35,12 @@ namespace gwt {
 #define JS_EncodeString(ctx, str) JS_GetStringBytes(str)
 #endif
 
+#if GECKO_VERSION >= 26000
+#define JSBool bool
+#define JS_TRUE true
+#define JS_FALSE false
+#endif
+
 class JavaObject {
 public:
   static bool isJavaObject(JSContext* ctx, JSObject* obj);

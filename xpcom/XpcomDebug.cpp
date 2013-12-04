@@ -50,7 +50,7 @@ std::string dumpJsVal(JSContext* ctx, jsval v) {
       int oid = JavaObject::getObjectId(ctx, obj);
       snprintf(buf, sizeof(buf), "JavaObj(%d)", oid);
     } else {
-      JSClass* jsClass = JS_GET_CLASS(ctx, obj);
+      const JSClass* jsClass = JS_GET_CLASS(ctx, obj);
       const char* name = jsClass->name ? jsClass->name : "<null>";
       snprintf(buf, sizeof(buf), "Object(%.20s @ %p)", name, obj);
     }

@@ -65,7 +65,11 @@ private:
 
   // Array of JSObjects exposed to the host
   JSObject* jsObjectsById;
+#if GECKO_VERSION >= 26000
+  const JSClass* stringObjectClass;
+#else
   JSClass* stringObjectClass;
+#endif
 
   std::map<void*, int> jsIdsByObject;
 };
