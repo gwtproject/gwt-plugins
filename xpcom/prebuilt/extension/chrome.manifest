@@ -143,35 +143,46 @@ binary-component lib/WINNT_x86-msvc/ff230/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc 
 binary-component lib/Darwin-gcc3/ff230/libgwt_dev_ff230.dylib ABI=Darwin_x86_64-gcc3 appversion<=23.0.*
 binary-component lib/Darwin-gcc3/ff230/libgwt_dev_ff230.dylib ABI=Darwin_x86-gcc3 appversion<=23.0.*
 
+# It looks like the above entries are based on a misunderstanding of how Firefox loads binary components.
+# 1. It's unclear whether wildcards actually work.
+# 2. Firefox doesn't stop at the first matching component. It will try to load all binaries that match.
+# (On Macs and Linux, it seems to log an error, but on Windows it crashes the browser.)
+#
+# So, we need to do proper range checks. There's a trick to it: the appversion and platformversion are actually
+# the same for Firefox. Using just appversion wouldn't work because it's an OR condition.
+# Not touching the entries before this because I haven't tested them and I don't know if Firefox changed its
+# behavior at some version.
+
 # Firefox 24
-binary-component lib/Linux_x86_64-gcc3/ff240/libgwt_dev_ff240.so ABI=Linux_x86_64-gcc3 appversion<=24.9.*
-binary-component lib/Linux_x86-gcc3/ff240/libgwt_dev_ff240.so ABI=Linux_x86-gcc3 appversion<=24.9.*
-binary-component lib/WINNT_x86-msvc/ff240/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion<=24.9.*
-binary-component lib/Darwin-gcc3/ff240/libgwt_dev_ff240.dylib ABI=Darwin_x86_64-gcc3 appversion<=24.9.*
-binary-component lib/Darwin-gcc3/ff240/libgwt_dev_ff240.dylib ABI=Darwin_x86-gcc3 appversion<=24.9.*
+# Linux: require 24.2+
+# previous versions not supported due to: https://bugzilla.mozilla.org/show_bug.cgi?id=927073
+binary-component lib/Linux_x86_64-gcc3/ff240/libgwt_dev_ff240.so ABI=Linux_x86_64-gcc3 appversion>=24.2 platformversion<25
+binary-component lib/Linux_x86-gcc3/ff240/libgwt_dev_ff240.so ABI=Linux_x86-gcc3 appversion>=24.2 platformversion<25
+# Others work with 24.0+
+binary-component lib/WINNT_x86-msvc/ff240/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion>=24 platformversion<25
+binary-component lib/Darwin-gcc3/ff240/libgwt_dev_ff240.dylib ABI=Darwin_x86_64-gcc3 appversion>=24 platformversion<25
+binary-component lib/Darwin-gcc3/ff240/libgwt_dev_ff240.dylib ABI=Darwin_x86-gcc3 appversion>=24 platformversion<25
 
 # Firefox 25
-binary-component lib/Linux_x86_64-gcc3/ff250/libgwt_dev_ff250.so ABI=Linux_x86_64-gcc3 appversion<=25.0.0
-binary-component lib/Linux_x86-gcc3/ff250/libgwt_dev_ff250.so ABI=Linux_x86-gcc3 appversion<=25.0.0
-binary-component lib/WINNT_x86-msvc/ff250/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion<=25.0.0
-binary-component lib/Darwin-gcc3/ff250/libgwt_dev_ff250.dylib ABI=Darwin_x86_64-gcc3 appversion<=25.0.0
-binary-component lib/Darwin-gcc3/ff250/libgwt_dev_ff250.dylib ABI=Darwin_x86-gcc3 appversion<=25.0.0
+binary-component lib/Linux_x86_64-gcc3/ff250/libgwt_dev_ff250.so ABI=Linux_x86_64-gcc3 appversion>=25 platformversion<25.0.1
+binary-component lib/Linux_x86-gcc3/ff250/libgwt_dev_ff250.so ABI=Linux_x86-gcc3 appversion>=25 platformversion<25.0.1
+binary-component lib/WINNT_x86-msvc/ff250/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion>=25 platformversion<25.0.1
+binary-component lib/Darwin-gcc3/ff250/libgwt_dev_ff250.dylib ABI=Darwin_x86_64-gcc3 appversion>=25 platformversion<25.0.1
+binary-component lib/Darwin-gcc3/ff250/libgwt_dev_ff250.dylib ABI=Darwin_x86-gcc3 appversion>=25 platformversion<25.0.1
 
 # Firefox 25.0.1
-binary-component lib/Linux_x86_64-gcc3/ff251/libgwt_dev_ff251.so ABI=Linux_x86_64-gcc3 appversion<=25.0.*
-binary-component lib/Linux_x86-gcc3/ff251/libgwt_dev_ff251.so ABI=Linux_x86-gcc3 appversion<=25.0.*
-binary-component lib/WINNT_x86-msvc/ff251/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion<=25.0.*
-binary-component lib/Darwin-gcc3/ff251/libgwt_dev_ff251.dylib ABI=Darwin_x86_64-gcc3 appversion<=25.0.*
-binary-component lib/Darwin-gcc3/ff251/libgwt_dev_ff251.dylib ABI=Darwin_x86-gcc3 appversion<=25.0.*
+binary-component lib/Linux_x86_64-gcc3/ff251/libgwt_dev_ff251.so ABI=Linux_x86_64-gcc3 appversion>=25.0.1 platformversion<26
+binary-component lib/Linux_x86-gcc3/ff251/libgwt_dev_ff251.so ABI=Linux_x86-gcc3 appversion>=25.0.1 platformversion<26
+binary-component lib/WINNT_x86-msvc/ff251/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion>=25.0.1 platformversion<26
+binary-component lib/Darwin-gcc3/ff251/libgwt_dev_ff251.dylib ABI=Darwin_x86_64-gcc3 appversion>=25.0.1 platformversion<26
+binary-component lib/Darwin-gcc3/ff251/libgwt_dev_ff251.dylib ABI=Darwin_x86-gcc3 appversion>=25.0.1 platformversion<26
 
 # Firefox 26
-binary-component lib/Linux_x86_64-gcc3/ff260/libgwt_dev_ff260.so ABI=Linux_x86_64-gcc3 appversion<=26.0.*
-binary-component lib/Linux_x86-gcc3/ff260/libgwt_dev_ff260.so ABI=Linux_x86-gcc3 appversion<=26.0.*
-binary-component lib/WINNT_x86-msvc/ff260/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion<=26.0.*
-binary-component lib/Darwin-gcc3/ff260/libgwt_dev_ff260.dylib ABI=Darwin_x86_64-gcc3 appversion<=26.0.*
-binary-component lib/Darwin-gcc3/ff260/libgwt_dev_ff260.dylib ABI=Darwin_x86-gcc3 appversion<=26.0.*
-
-
+binary-component lib/Linux_x86_64-gcc3/ff260/libgwt_dev_ff260.so ABI=Linux_x86_64-gcc3 appversion>=26 platformversion<27
+binary-component lib/Linux_x86-gcc3/ff260/libgwt_dev_ff260.so ABI=Linux_x86-gcc3 appversion>=26 platformversion<27
+binary-component lib/WINNT_x86-msvc/ff260/xpGwtDevPlugin.dll ABI=WINNT_x86-msvc appversion>=26 platformversion<27
+binary-component lib/Darwin-gcc3/ff260/libgwt_dev_ff260.dylib ABI=Darwin_x86_64-gcc3 appversion>=26 platformversion<27
+binary-component lib/Darwin-gcc3/ff260/libgwt_dev_ff260.dylib ABI=Darwin_x86-gcc3 appversion>=26 platformversion<27
 
 interfaces components/IOOPHM.xpt
 contract @gwt.google.com/ExternalWrapper;1 {028DD88B-6D65-401D-AAFD-17E497D15D09}
