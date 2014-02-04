@@ -215,7 +215,7 @@ NSPR_DLLFLAGS = -lnss3
 endif
 else
 ifeq ($(BROWSER),ff240)
-GECKO_VERSION   = 24.0.0
+GECKO_VERSION   = 24.2.0
 CFLAGS += -DGECKO_VERSION=24000
 GECKO_DLLFLAGS = -lxpcomglue_s
 ifeq ($(OS),mac)
